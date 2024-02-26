@@ -2,7 +2,7 @@ import os
 import numpy as np
 from PIL import Image
 from  yolov8n.yaml import YOLO  
-from your_utils_module import plot_bboxes2 
+from bounding_box import plot_bboxes2 
 
 # Define the relative path to the test_images folder
 folder = 'test_images'
