@@ -1,0 +1,38 @@
+import os
+import numpy as np
+from PIL import Image
+from  yolov8n.yaml import YOLO  
+from your_utils_module import plot_bboxes2 
+
+# Define the relative path to the test_images folder
+folder = 'test_images'
+
+# Create an output folder if it doesn't exist
+output_folder = "output"
+if not os.path.exists(output_folder):
+    os.makedirs(output_folder)
+else:
+    i = 1
+    while os.path.exists(f"{output_folder}_{i}"):
+        i += 1
+    output_folder = f"{output_folder}_{i}"
+    os.makedirs(output_folder)
+
+# Loop through test images
+for img_name in os.listdir(folder):
+    item_path = os.path.join(folder, img_name)
+    image = Image.open(item_path)
+    image1 = np.asarray(image)
+
+    # Get image dimensions
+    (h, w) = image1.shape[:2]
+
+    # Load the YOLO model
+    model = YOLO("runs/detect/train/weights/best.pt")  
+
+    # Predict on the image
+    results = model(image)
+
+    # Plot bounding boxes and save the new image
+    new_img, label = plot_bboxes2(img_name, output_folder, image1, results[0].boxes.data, score=True)
+
